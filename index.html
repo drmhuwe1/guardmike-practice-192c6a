@@ -43,7 +43,7 @@
   </main>
   <script>
     function orderTotal(price, qty) {
-      return price + qty;
+      return price * qty;
     }
     document.getElementById("calc-btn").addEventListener("click", function () {
       var price = parseFloat(document.getElementById("price").value) || 0;
