@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+<body>
+  <main>
+    <h1>GuardMike practice app</h1>
+    <p>This throwaway page exists only so GuardMike can practice finding and fixing a mistake. It holds no real data and sends nothing anywhere. It is safe to delete.</p>
+
+    <section aria-labelledby="calc-title">
+      <h2 id="calc-title">Order calculator</h2>
+      <label for="price">Price per item</label>
+      <input id="price" type="number" step="0.01" min="0">
+      <label for="qty">How many</label>
+      <input id="qty" type="number" step="1" min="0">
+      <button type="button" id="calc-btn">Calculate total</button>
+      <p id="calc-result" role="status"></p>
+    </section>
+
+    <section aria-labelledby="details-title">
+      <h2 id="details-title">Details form</h2>
+      <label for="name">Your name</label>
+      <input id="name" type="text">
+      <button type="button" id="details-btn">Check my details</button>
+      <p id="details-result" role="status"></p>
+    </section>
+
+    <section aria-labelledby="signin-title">
+      <h2 id="signin-title">Test-only sign-in</h2>
+      <label for="user">Test username</label>
+      <input id="user" type="text" autocomplete="off">
+      <label for="pass">Test password</label>
+      <input id="pass" type="password" autocomplete="off">
+      <button type="button" id="signin-btn">Sign in</button>
+      <p id="signin-result" role="status"></p>
+    </section>
+
+    <p><a href="about.html">About this practice app</a></p>
+  </main>
+  <script>
+    function orderTotal(price, qty) {
+      return price + qty;
+    }
+    document.getElementById("calc-btn").addEventListener("click", function () {
+      var price = parseFloat(document.getElementById("price").value) || 0;
+      var qty = parseFloat(document.getElementById("qty").value) || 0;
+      document.getElementById("calc-result").textContent = "Total: $" + orderTotal(price, qty).toFixed(2);
+    });
+    document.getElementById("details-btn").addEventListener("click", function () {
+      var name = document.getElementById("name").value.trim();
+      document.getElementById("details-result").textContent = name ? "Looks good, " + name + "." : "Please type your name.";
+    });
+    var PASS_FINGERPRINT = "df78c1de4dc63aee193a66918f3b1b533688afd06f10c12ef77fef58a5144b84";
+    document.getElementById("signin-btn").addEventListener("click", async function () {
+      var user = document.getElementById("user").value.trim();
+      var pass = document.getElementById("pass").value;
+      var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pass));
+      var hex = Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+      document.getElementById("signin-result").textContent = user === "practice-tester" && hex === PASS_FINGERPRINT ? "Signed in as practice-tester" : "Wrong test username or password";
+    });
+  </script>
+</body>
+</html>
